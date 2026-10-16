@@ -15,14 +15,32 @@
 const GALLERY = {
   title: 'The Little Gallery',
   line: 'Walk with the arrow keys, or tap the arrows.',
-  works: [
-    { id: 'g1', kind: 'memory', memory: 'm1', story: '' },
-    { id: 'g2', kind: 'memory', memory: 'm2', story: '' },
-    { id: 'g3', kind: 'memory', memory: 'm3', story: '' },
-    { id: 'g4', kind: 'art', devExample: true, title: 'Dev example: her artwork',
-      image: 'assets/images/her-art-01.jpg', alt: '', caption: '[Her artwork goes here.]',
-      story: '[Optional deeper story about this piece.]', status: 'placeholder' }
-  ],
+ works: [
+  {
+    id: 'g1',
+    kind: 'memory',
+    memory: 'm1',
+    story: 'If I could keep one ordinary moment forever, it would be one where I got to hold your hand.'
+  },
+  {
+    id: 'g2',
+    kind: 'memory',
+    memory: 'm2',
+    story: 'I only wanted to make your day a little better. I never knew that little moment would mean so much to me.'
+  },
+  {
+    id: 'g3',
+    kind: 'memory',
+    memory: 'm3',
+    story: 'I thought it was going to be a disappointing day. Then you hugged me, and suddenly, nothing else mattered.'
+  },
+  {
+    id: 'g4',
+    kind: 'memory',
+    memory: 'm4',
+    story: 'We were miles apart, sitting in the dark, yet somehow that conversation brought you closer to my heart.'
+  }
+],
   flipLabel: 'Turn it over',
   flipBackLabel: 'Turn it back',
   noStory: 'Nothing is written on the back.'
