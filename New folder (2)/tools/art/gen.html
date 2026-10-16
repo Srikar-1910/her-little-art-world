@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8"><title>art generator</title>
+<style>html,body{margin:0;background:transparent}</style></head><body>
+<!-- Dev tool: renders one painted scene layer for build-art.js. Not part of the shipped site. -->
+<script src="toolkit.js"></script><script src="scenes1.js"></script><script src="scenes2.js"></script>
+<script>
+(function () {
+  const q = new URLSearchParams(location.search);
+  const sc = q.get('s'), W = +q.get('w'), H = +q.get('h'), mode = q.get('m') || 'full', stage = +(q.get('stage') || 2);
+  P.FLAGS.noText = true; P.CTX.W = W; P.CTX.H = H;
+  document.body.insertAdjacentHTML('beforeend', P.defs());
+  const map = { entrance: S1.entrance, world: S1.world, studio: S2.studio, garden: S2.garden, gallery: S2.gallery, listening: S2.listening, desk: S2.desk };
+  const inner = sc === 'finale' ? S2.finale(W, H, 51, stage) : map[sc](W, H);
+  const r = P.rng(7), f = P.f, m = 9;
+  const jag = (x1, y1, x2, y2, n) => Array.from({ length: n }, (_, i) => [x1 + ((x2 - x1) * i) / n + (r() - 0.5) * 5, y1 + ((y2 - y1) * i) / n + (r() - 0.5) * 5]);
+  const pts = [].concat(jag(m, m, W - m, m, 18), jag(W - m, m, W - m, H - m, 12), jag(W - m, H - m, m, H - m, 18), jag(m, H - m, m, m, 12));
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + f(p[0]) + ' ' + f(p[1])).join('') + 'Z';
+  document.body.insertAdjacentHTML('beforeend',
+    `<svg id="art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="display:block">
+<defs><mask id="em" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><g filter="url(#edge)"><path d="${d}" fill="#fff"/></g></mask></defs>
+<g mask="url(#em)">${inner}</g></svg>`);
+  document.querySelectorAll('#art path,#art rect,#art circle,#art ellipse,#art polygon,#art polyline,#art line,#art text').forEach((el) => {
+    if (el.closest('mask,clipPath,defs,pattern')) return;
+    const pn = !!el.closest('.pn'), lt = !!el.closest('.lt');
+    const hide = mode === 'sketch' ? !pn : mode === 'wash' ? (pn || lt) : pn;
+    if (hide) el.style.display = 'none';
+  });
+  window.__anchors = P.A;
+  window.__ready = true;
+})();
+</script></body></html>
