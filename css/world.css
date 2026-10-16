@@ -1,0 +1,130 @@
+/* ============================================================
+   WORLD: scene scaffolding, the painted stage, the entrance and
+   the connected little world. (Rooms are in rooms.css.)
+   ============================================================ */
+
+/* ---------- scene scaffolding ---------- */
+#scenes { position: fixed; inset: 0; z-index: 10; overflow: hidden; }
+.scene { position: absolute; inset: 0; overflow: hidden; background: var(--scene-bg, #eadcbf); }
+
+.scene.iris { clip-path: circle(0px at var(--ox, 50%) var(--oy, 50%)); }
+.scene.iris.go { clip-path: circle(160vmax at var(--ox, 50%) var(--oy, 50%)); transition: clip-path 1s var(--ease-out); }
+.scene.fade { opacity: 0; }
+.scene.fade.go { opacity: 1; transition: opacity .7s var(--ease-soft); }
+.scene.leaving { pointer-events: none; }
+.scene.leaving * { pointer-events: none !important; }
+
+.scene-ui { position: absolute; inset: 0; z-index: 8; pointer-events: none; }
+.scene-ui > * { pointer-events: auto; }
+
+/* ---------- the painted sheet ---------- */
+.pt-host {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background:
+    radial-gradient(120% 100% at 50% 40%, rgba(255, 248, 232, .9), rgba(233, 217, 186, 0) 70%),
+    repeating-linear-gradient(97deg, rgba(139, 106, 78, .035) 0 2px, transparent 2px 7px),
+    #eadcbf;
+}
+.pt-wrap { position: relative; filter: drop-shadow(0 8px 18px rgba(75, 51, 80, .28)); }
+.pt-stage { position: relative; --u: .5; }
+.pt-art, .pt-frame { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.pt-frame { transition: none; user-select: none; -webkit-user-drag: none; }
+.pt-stage > .pin { position: absolute; transform: translate(-50%, -50%); }
+
+/* ---------- little paper tags and hand notes ---------- */
+.tag {
+  display: inline-block; white-space: nowrap;
+  font-family: var(--font-body); font-style: italic; font-weight: 400;
+  font-size: clamp(13px, calc(var(--u) * 19px), 20px); line-height: 1.2;
+  color: var(--ink); background: #f6ecd2; padding: .22em .75em .28em;
+  box-shadow: 0 2px 6px rgba(43, 36, 72, .28);
+  clip-path: polygon(0 4%, 18% 0, 52% 6%, 86% 0, 100% 5%, 99% 52%, 100% 96%, 66% 100%, 30% 94%, 3% 100%, 0 60%);
+}
+.note-hand { font-family: var(--font-hand); font-size: 1.25rem; line-height: 1.2; color: var(--ink-soft); }
+
+/* ---------- ENTRANCE ---------- */
+.scene-entrance { --scene-bg: #eadcbf; }
+.entrance-door {
+  appearance: none; background: none; border: 0; padding: 0; cursor: pointer;
+  width: calc(var(--u) * 300px); height: calc(var(--u) * 420px); min-width: 88px; min-height: 120px;
+  border-radius: 40% 40% 0 0 / 28% 28% 0 0;
+}
+.entrance-door::after {
+  content: ""; position: absolute; inset: 8% 14% 4%; border-radius: 40% 40% 0 0 / 26% 26% 0 0;
+  box-shadow: 0 0 0 0 rgba(255, 210, 122, 0); transition: box-shadow .6s var(--ease-soft);
+}
+.entrance-door:hover::after, .entrance-door:focus-visible::after { box-shadow: 0 0 calc(var(--u) * 60px) calc(var(--u) * 14px) rgba(255, 210, 122, .55); }
+.entrance-door:focus-visible { outline-offset: 4px; }
+
+.entrance-text {
+  position: absolute; left: 50%; top: 5%; transform: translateX(-50%); width: 88%;
+  text-align: center; color: #f6ead0; text-shadow: 0 2px 14px rgba(13, 10, 32, .7);
+  pointer-events: none; opacity: 0; animation: fadeUp 1.6s var(--ease-out) 1.6s forwards;
+}
+.entrance-text .eyebrow { font-family: var(--font-hand); font-size: clamp(1rem, calc(var(--u) * 28px), 1.6rem); margin: 0 0 .1em; opacity: .9; }
+.entrance-text h1 {
+  font-style: italic; font-weight: 300; letter-spacing: -.01em;
+  font-size: clamp(2rem, calc(var(--u) * 84px), 4.4rem); color: #FFE9B0;
+}
+.entrance-text .name { font-size: clamp(1.2rem, calc(var(--u) * 36px), 2rem); margin: .1em 0 0; font-style: italic; }
+.entrance-text .sub { font-size: clamp(.95rem, calc(var(--u) * 22px), 1.15rem); max-width: 34ch; margin: .8em auto 0; line-height: 1.55; opacity: .92; }
+.entrance-text .today { font-family: var(--font-hand); font-size: 1.5rem; margin: .4em 0 0; color: #FFE7A8; }
+@keyframes fadeUp { from { opacity: 0; transform: translate(-50%, 14px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+.entrance-actions {
+  position: absolute; left: 50%; bottom: calc(var(--safe-bottom) + 18px); transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: .55rem;
+  opacity: 0; animation: fadeUp2 1.4s var(--ease-out) 2.6s forwards;
+}
+@keyframes fadeUp2 { from { opacity: 0; transform: translate(-50%, 14px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.entrance-actions .links { display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+.entrance-actions .text-btn { color: var(--ink); background: rgba(251, 243, 228, .88); border-radius: 999px; padding: .35em 1em; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+.entrance-flash {
+  position: fixed; z-index: 40; left: var(--fx, 50%); top: var(--fy, 50%); width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%;
+  background: radial-gradient(circle, #fff6d6 0 30%, #ffd89a 55%, rgba(255, 200, 120, 0) 72%);
+  transform: scale(0); opacity: 0; pointer-events: none;
+}
+.scene-entrance.opening .entrance-flash { transform: scale(90); opacity: 1; transition: transform 1.5s var(--ease-soft), opacity .5s; }
+.scene-entrance.opening .entrance-text, .scene-entrance.opening .entrance-actions { opacity: 0 !important; transition: opacity .5s; animation: none; }
+
+/* ---------- WORLD ---------- */
+.scene-world { --scene-bg: #eadcbf; }
+.place-btn {
+  appearance: none; background: none; border: 0; padding: 0; cursor: pointer; color: inherit; font: inherit;
+  width: calc(var(--u) * 230px); height: calc(var(--u) * 190px); min-width: 74px; min-height: 66px;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px;
+}
+.place-btn .tag { transform: translateY(calc(var(--u) * 28px)) rotate(-2deg); transition: transform .4s var(--ease-out), background .3s; }
+.place-btn:hover .tag, .place-btn:focus-visible .tag { transform: translateY(calc(var(--u) * 22px)) rotate(0deg) scale(1.06); background: #fff7e0; }
+.place-btn.visited .tag::after { content: " ✦"; color: #b88a2a; font-style: normal; }
+.place-btn:focus-visible { outline: 3px solid var(--honey); border-radius: 18px; }
+.place-btn .dot {
+  position: absolute; left: 50%; top: 42%; width: calc(var(--u) * 22px); height: calc(var(--u) * 22px); min-width: 12px; min-height: 12px;
+  margin: calc(var(--u) * -11px) 0 0 calc(var(--u) * -11px); border-radius: 50%;
+  border: 2px solid rgba(255, 231, 168, .95); box-shadow: 0 0 10px rgba(255, 210, 122, .8), inset 0 0 6px rgba(255, 210, 122, .7);
+  animation: ping 3.4s ease-in-out infinite; pointer-events: none;
+}
+.place-btn.visited .dot { animation: none; opacity: .0; }
+@keyframes ping { 0%, 100% { transform: scale(.85); opacity: .5; } 50% { transform: scale(1.25); opacity: 1; } }
+
+.place-btn.reveal .tag { background: linear-gradient(180deg, #FFE7A8, #FFD27A); color: #3a2a3a; font-weight: 500; }
+.lantern-glow {
+  position: absolute; transform: translate(-50%, -50%); width: calc(var(--u) * 260px); height: calc(var(--u) * 260px);
+  border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 231, 168, .95) 0 6%, rgba(255, 210, 122, .55) 22%, rgba(255, 210, 122, 0) 66%);
+  mix-blend-mode: screen; animation: breathe 4.5s ease-in-out infinite;
+}
+@keyframes breathe { 50% { transform: translate(-50%, -50%) scale(1.14); opacity: .75; } }
+
+.world-foot {
+  position: absolute; left: 50%; bottom: calc(var(--safe-bottom) + 10px); transform: translateX(-50%);
+  display: flex; gap: .4rem 1rem; flex-wrap: wrap; justify-content: center; align-items: center; max-width: 96vw;
+  background: rgba(251, 243, 228, .93); border-radius: 999px; padding: .15rem .9rem; box-shadow: 0 4px 14px rgba(43, 36, 72, .22);
+}
+.world-foot .text-btn { min-height: 44px; display: inline-flex; align-items: center; text-decoration-color: rgba(58, 42, 58, .4); }
+.world-foot .hint { margin: 0; }
+.world-foot .text-btn { white-space: nowrap; }
+@media (max-width: 560px) { .world-foot .hint { display: none; } }
+
+/* when the whole world is lit */
+.scene-world.lit .pt-wrap { filter: drop-shadow(0 8px 28px rgba(255, 190, 110, .35)); }

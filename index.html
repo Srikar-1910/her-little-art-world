@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Her Little Art World</title>
+<meta name="description" content="A small illustrated world, made as a birthday gift.">
+<meta name="theme-color" content="#eadcbf">
+<link rel="icon" href="data:,">
+
+<!-- Fonts are a nicety. If they can't load, the fallbacks in css/base.css take over. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/world.css">
+<link rel="stylesheet" href="css/rooms.css">
+</head>
+<body data-scene="entrance">
+
+<!-- Every scene is mounted into #scenes by js/main.js -->
+<main id="scenes" aria-label="Her Little Art World"></main>
+
+<!-- Soft moving light: fireflies, dust, petals. Never intercepts a tap. -->
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<!-- Always-there controls (shown once she has come inside) -->
+<nav id="hud" class="hud" aria-label="World controls" hidden>
+  <button id="backBtn" class="back-btn" type="button" hidden>
+    <span aria-hidden="true">←</span> <span id="backLabel">The little world</span>
+  </button>
+  <div class="hud-right">
+    <button id="placesBtn" class="round-btn" type="button" aria-label="Places" title="Places">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.7-6.5-11a6.5 6.5 0 0 1 13 0c0 5.3-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+    </button>
+    <button id="soundBtn" class="round-btn" type="button" aria-label="Sound" aria-pressed="true" title="Sound">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9.5v5h3.6L12.5 19V5L7.6 9.5H4z"/><path class="wave" d="M16 9a4.2 4.2 0 0 1 0 6"/><path class="wave" d="M18.6 6.4a8 8 0 0 1 0 11.2"/><path class="mute" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+    </button>
+  </div>
+</nav>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<filter id="wcWash" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+ <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="3" result="n"/>
+ <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="d"/>
+ <feMorphology in="d" operator="erode" radius="1.6" result="er"/><feGaussianBlur in="er" stdDeviation="1.4" result="erb"/>
+ <feComposite in="d" in2="erb" operator="out" result="rim"/>
+ <feColorMatrix in="rim" type="matrix" values="0.8 0 0 0 0 0 0.76 0 0 0 0 0 0.82 0 0 0 0 0 0.85 0" result="rimd"/>
+ <feMerge><feMergeNode in="d"/><feMergeNode in="rimd"/></feMerge>
+</filter>
+<filter id="pencilRough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="21" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2"/></filter>
+</defs></svg>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="live" class="sr-only" aria-live="polite"></div>
+
+<noscript>
+  <p style="font-family:Georgia,serif;padding:2rem;text-align:center">
+    This little world needs JavaScript to open its door. Please enable it and come back.
+  </p>
+</noscript>
+
+<!-- No ES modules on purpose, so the project also works when index.html is
+     double-clicked (file://). Order matters: config -> content -> engine -> scenes -> boot. -->
+<script src="js/config.js"></script>
+
+<script src="content/about.js"></script>
+<script src="content/memories.js"></script>
+<script src="content/gallery.js"></script>
+<script src="content/recordings.js"></script>
+<script src="content/letters.js"></script>
+<script src="content/reveal.js"></script>
+<script src="js/content-rules.js"></script>
+
+<script src="js/store.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/atmosphere.js"></script>
+<script src="js/art-data.js"></script>
+<script src="js/painting.js"></script>
+<script src="js/router.js"></script>
+<script src="js/rooms-common.js"></script>
+
+<script src="js/scenes/entrance.js"></script>
+<script src="js/scenes/world.js"></script>
+<script src="js/scenes/myworld.js"></script>
+<script src="js/scenes/garden.js"></script>
+<script src="js/scenes/gallery.js"></script>
+<script src="js/scenes/listening.js"></script>
+<script src="js/scenes/desk.js"></script>
+<script src="js/scenes/reveal.js"></script>
+
+<script src="js/main.js"></script>
+</body>
+</html>
